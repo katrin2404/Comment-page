@@ -1,108 +1,32 @@
-<!DOCTYPE html>
-<html ng-app="CommentsPageApp" lang="en">
+<!doctype html>
+<html lang="en" ng-app="postsApp">
 <head>
-  <meta charset="UTF-8">
-  <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta charset="utf-8">
+  <base href="/">
+  <title ng-bind="title"></title>
+  <link href="fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link
-    href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900'
-    rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="angular-material.css">
+    href='fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900'>
+
   <!-- inject:css -->
   <!-- endinject -->
-  <title>Angular: Comments page</title>
+  <script src="angular.js"></script>
+  <script src="angular-animate.js"></script>
+  <script src="angular-aria.js"></script>
+  <script src="angular-messages.js"></script>
+  <script src="angular-material.js"></script>
+  <script src="angular-route.js"></script>
+
+  <script src=""></script>
+  <!-- inject:js -->
+  <!-- endinject -->
+
 </head>
-<body ng-controller="CommentsPageCtrl">
-<div id="app" class="layout-column">
-  <h1>{{name}}</h1>
-  <md-content>
-    <md-list flex>
-      <md-subheader class="md-no-sticky">Comments:</md-subheader>
-      <md-list-item class="md-3-line" id="comments" ng-repeat="comment in comments" ng-click="null">
-        <div class="md-list-item-text" layout="column">
-          <p>
-            <!--<i class="material-icons">schedule</i>-->
-            <span>Created: {{comment.timeToday | date:'dd.MM.yyyy hh:mm:ss'}}</span>
-            <span ng-show="comment.updateTime">, Edited: {{comment.updateTime | date:'dd.MM.yyyy hh:mm:ss'}}</span>
-            <span class="flex-30">
-            <md-button class="md-icon-button md-fab md-primary md-36" aria-label="Edit" title="Edit Comment"
-                       ng-click="editComment(comment)" ng-hide="activeComment.id">
-              <i class="material-icons md-18">edit</i>
-            </md-button>
-            <md-button class="md-icon-button md-fab md-36" aria-label="Remove" title="Remove Comment"
-                       ng-click="removeComment(comment)" ng-hide="activeComment.id">
-              <i class="material-icons md-18">delete_forever</i>
-            </md-button>
-          </span>
-          </p>
-          <h3 class="md-headline">
-            <i class="material-icons md-fab md-primary avator">account_circle</i>
-            {{comment.author}}
-          </h3>
-          <h3 class="md-display-3">
-            <!--            <i class="material-icons">comment</i>-->
-            {{comment.message}}
-          </h3>
-        </div>
-      </md-list-item>
-      <md-divider></md-divider>
-    </md-list>
-  </md-content>
-</div>
-<div class=" commenting">
-  <form name="commentForm" ng-submit="onSubmit(activeComment)" novalidate>
-    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-      <md-input-container>
-        <label>Name</label>
-        <input
-          ng-model="activeComment.author"
-          class="form-control"
-          placeholder="Type your name"
-          name="user"
-          ng-minlength='3'
-          required>
+<body>
 
-
-        <div ng-messages="commentForm.user.$error">
-          <div ng-message="required">This field is required</div>
-          <div ng-message="minlength">Too short!</div>
-        </div>
-      </md-input-container>
-
-      <md-input-container>
-        <label>Comment</label>
-        <textarea
-          ng-model="activeComment.message"
-          class="form-control"
-          placeholder="Type your comment"
-          name="comment"
-          ng-maxlength="100"
-          hi-valid="Hello"
-          required></textarea>
-        <div ng-messages="commentForm.comment.$error">
-          <div ng-message="required">This field is required</div>
-          <div ng-message="maxlength">Too long!</div>
-          <div ng-message="hi-valid">Be polite! Write Hello!</div>
-        </div>
-      </md-input-container>
-    </section>
-
-    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-      <md-button type="submit" class="md-raised md-primary">{{sendButton}}</md-button>
-      <md-button class="md-raised md-warn" ng-show="activeComment.id" ng-click="resetForm()">
-        Cancel
-      </md-button>
-    </section>
-  </form>
-
+<div class="view-container">
+  <div ng-view class="view-frame"></div>
 </div>
 
-<script src="angular.js"></script>
-<script src="angular-animate.js"></script>
-<script src="angular-aria.js"></script>
-<script src="angular-messages.js"></script>
-<script src="angular-material.js"></script>
-<script src=""></script>
-<!-- inject:js -->
-<!-- endinject -->
 </body>
 </html>

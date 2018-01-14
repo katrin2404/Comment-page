@@ -1,0 +1,51 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <!--Sidebar content-->
+            <div>
+                <label class="text-info" for='filter-posts'>Search post:</label>
+                <input id='filter-posts' ng-model="searchPost.title"/>
+            </div>
+
+            <div>
+                <label class="text-info" for='filter-author'>Search user in the page:</label>
+                <input id='filter-author' ng-model="searchUser.user.name"/>
+            </div>
+
+            <div>
+                <label class="text-info" for='sort-posts'>Sort in the page by:</label>
+                <select class="list-group-item active" id="sort-posts" ng-model="$ctrl.orderProp">
+                    <option value="title">Alphabetical &#9650;</option>
+                    <option value="-title">Alphabetical &#9660;</option>
+                    <option value="">Without Sort</option>
+                </select>
+            </div>
+            <p class="text-success">Total number of posts: {{$ctrl.posts.length}}</p>
+        </div>
+        <div class="col-md-10">
+            <!--Body content-->
+
+            <ul class="posts">
+                <li class="list-group-item list-group-item-success"
+                    ng-repeat="post in $ctrl.posts | filter:searchPost | startFrom:currentPage*pageSize | limitTo:pageSize | filter:searchUser | orderBy:$ctrl.orderProp"
+                >
+                    <span class="glyphicon glyphicon-envelope"></span>
+                    <a href="#!/Details/{{post.id}}">{{post.title}}</a>
+                    <span class="glyphicon glyphicon-user text-warning"></span>
+                    <span class="text-warning">{{post.user.name}}</span>
+                </li>
+            </ul>
+            <div class="pagination-buttons">
+                <button class="btn btn-success" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+                    Previous
+                </button>
+                {{currentPage+1}}/{{numberOfPages()}}
+                <button class="btn btn-success" ng-disabled="currentPage >= getData().length/pageSize - 1"
+                        ng-click="currentPage=currentPage+1">
+                    Next
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

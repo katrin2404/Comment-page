@@ -1,0 +1,53 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <!--Sidebar content-->
+            <div>
+                <label class="text-info" for='filter-posts'>Search post:</label>
+                <input id='filter-posts' ng-model="vm.searchPost"/>
+            </div>
+
+            <div>
+                <label class="text-info" for='filter-author'>Search user in the page:</label>
+                <input id='filter-author' ng-model="vm.searchUser.user.name"/>
+            </div>
+
+            <div>
+                <label class="text-info" for='sort-posts'>Sort in the page by:</label>
+                <select class="list-group-item active" id="sort-posts" ng-model="vm.orderProp">
+                    <option value="title">Alphabetical &#9650;</option>
+                    <option value="-title">Alphabetical &#9660;</option>
+                    <option value="">Without Sort</option>
+                </select>
+            </div>
+            <p class="text-success">Total number of posts: {{vm.posts.length}}</p>
+        </div>
+        <div class="col-md-9">
+            <!--Body content-->
+
+            <ul class="posts">
+                <li class="list-group-item list-group-item-success"
+                    ng-repeat="post in vm.posts | filter:vm.searchPost | startFrom: vm.currentPage * vm.pageSize | limitTo:vm.pageSize | filter:vm.searchUser | orderBy:vm.orderProp"
+                >
+                    <span class="glyphicon glyphicon-envelope"></span>
+                    <a href="#!/Details/{{post.id}}">{{post.title}}</a>
+                    <span class="glyphicon glyphicon-user text-warning"></span>
+                    <span class="text-warning">{{post.user.name}}</span>
+                </li>
+            </ul>
+            <div class="pagination-buttons">
+                <button class="btn btn-success" ng-disabled="vm.currentPage == 0"
+                        ng-click="vm.currentPage=vm.currentPage-1">
+                    Previous
+                </button>
+                {{vm.currentPage+1}}/{{vm.numberOfPages((vm.posts | filter:vm.searchPost) , vm.pageSize)}}
+                <button class="btn btn-success"
+                        ng-disabled="vm.currentPage >= vm.getData((vm.posts | filter:vm.searchPost)).length/vm.pageSize - 1"
+                        ng-click="vm.currentPage=vm.currentPage+1">
+                    Next
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>

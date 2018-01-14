@@ -1,15 +1,20 @@
 const gulp = require('gulp');
 const inject = require('gulp-inject');
 const concat = require('gulp-concat');
+const templateCache = require('gulp-angular-templatecache');
 const concatCss = require('gulp-concat-css');
 const webserver = require('gulp-webserver');
 const clean = require('gulp-clean');
 const gulpSequence = require('gulp-sequence');
 
+
 const conf = {
   src: './src/',
   dist: './dist/',
   js: [
+    './src/**/posts-list.module.js',
+    './src/**/post-detail.module.js',
+    './src/app.module.js',
     './src/**/*.js',
   ],
   jsExternal: [
@@ -18,14 +23,25 @@ const conf = {
     './node_modules/angular-aria/angular-aria.js',
     './node_modules/angular-messages/angular-messages.js',
     './node_modules/angular-material/angular-material.js',
+    './node_modules/angular-route/angular-route.js',
   ],
   cssExternal: [
+    './node_modules/bootstrap/dist/css/bootstrap.css',
     './node_modules/angular-material/angular-material.css',
   ],
   css: [
     './src/styles/**/*.css',
+  ],
+  templates: [
+    './src/**/*.template.html',
   ]
 };
+
+gulp.task('templates', function () {
+  return gulp.src(conf.templates)
+    .pipe(templateCache('templates.js', {module: 'postsList'}))
+    .pipe(gulp.dest(conf.dist));
+});
 
 gulp.task('clean', () => {
   return gulp
@@ -89,7 +105,7 @@ gulp.task('html', () => {
  */
 gulp.task('inject', ['html'], () => {
   const target = gulp.src(conf.dist + 'index.html');
-  const sources = gulp.src([conf.dist + 'bundle.js', conf.dist + '**/*.css']);
+  const sources = gulp.src([ conf.dist + 'bundle.js', conf.dist + 'templates.js', conf.dist + '**/*.css']);
 
   return target
     .pipe(inject(sources, {relative: true}))
@@ -99,11 +115,12 @@ gulp.task('inject', ['html'], () => {
 /**
  * Build app
  */
-gulp.task('build', gulpSequence('clean', ['js', 'external-js', 'css', 'external-css'], 'inject'));
+gulp.task('build', gulpSequence('clean', ['js', 'external-js', 'templates', 'css', 'external-css'], 'inject'));
 
 gulp.task('server', ['build'], () => {
   return gulp.src(conf.dist)
     .pipe(webserver({
+      port: 63343,
       livereload: true,
       open: true,
     }));
